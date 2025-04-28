@@ -1,10 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Plant } from '@/data/plants';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Bell, Calendar, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog';
+import { PlantReminder, ReminderType, reminderTypeLabels, defaultReminders } from '@/data/reminderTypes';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface PlantCardProps {
   plant: Plant;
@@ -12,9 +22,45 @@ interface PlantCardProps {
 }
 
 const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
+  const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
+  
   const handleDelete = () => {
     onDelete(plant.id);
     toast.success(`${plant.name} has been removed from your plants`);
+  };
+
+  const handleCreateReminder = (type: ReminderType) => {
+    // Using the default reminders based on plant type
+    const defaultReminder = defaultReminders[plant.type]?.find(r => r.type === type);
+    
+    const newReminder: PlantReminder = {
+      id: `reminder_${Date.now()}`,
+      plantId: plant.id,
+      plantName: plant.name,
+      type: type,
+      frequency: defaultReminder?.frequency || 7, // Default to weekly if no match
+      nextDue: new Date(Date.now() + 86400000).toISOString(), // Default to tomorrow
+      notes: defaultReminder?.notes || '',
+      enabled: true
+    };
+    
+    // Get existing reminders from localStorage or initialize empty array
+    const existingReminders: PlantReminder[] = JSON.parse(localStorage.getItem('plantReminders') || '[]');
+    
+    // Add new reminder
+    const updatedReminders = [...existingReminders, newReminder];
+    localStorage.setItem('plantReminders', JSON.stringify(updatedReminders));
+    
+    // Request notification permission if not granted yet
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission();
+    }
+    
+    toast.success(`Reminder set for ${plant.name}`, {
+      description: `${reminderTypeLabels[type]} every ${newReminder.frequency} day(s)`
+    });
+    
+    setIsReminderDialogOpen(false);
   };
 
   // Format date
@@ -34,7 +80,26 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
         />
       </div>
       <CardContent className="p-4">
-        <h3 className="text-lg font-bold text-ur-green">{plant.name}</h3>
+        <div className="flex justify-between items-start">
+          <h3 className="text-lg font-bold text-ur-green">{plant.name}</h3>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setIsReminderDialogOpen(true)}>
+                <Bell className="mr-2 h-4 w-4" />
+                Add Reminder
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Plant
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <p className="text-sm text-gray-500 mb-2">{plant.type}</p>
         <div className="space-y-1 mt-3">
           <p className="text-sm"><span className="font-medium">Water:</span> {plant.waterFrequency}</p>
@@ -44,15 +109,32 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between">
         <Button variant="outline" className="text-ur-blue border-ur-blue hover:bg-ur-blue hover:text-white">
+          <Calendar className="mr-2 h-4 w-4" />
           View Details
         </Button>
-        <Button 
-          variant="ghost" 
-          className="text-red-500 hover:bg-red-50 hover:text-red-600"
-          onClick={handleDelete}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Reminder for {plant.name}</DialogTitle>
+              <DialogDescription>
+                Choose the type of reminder you want to set up for your plant.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-3 py-4">
+              {(Object.keys(reminderTypeLabels) as ReminderType[]).map((type) => (
+                <Button 
+                  key={type} 
+                  variant="outline" 
+                  className="flex-col h-24 space-y-2"
+                  onClick={() => handleCreateReminder(type)}
+                >
+                  <Bell className="h-6 w-6 text-ur-green" />
+                  <span>{reminderTypeLabels[type]}</span>
+                </Button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardFooter>
     </Card>
   );

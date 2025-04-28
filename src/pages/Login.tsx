@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LoginForm from '@/components/auth/LoginForm';
 import { Leaf } from 'lucide-react';
 import { toast } from 'sonner';
@@ -8,6 +8,22 @@ import { toast } from 'sonner';
 const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectAfterLogin = location.state?.from || '/my-plants';
+
+  useEffect(() => {
+    // Check if already logged in
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (isAuthenticated) {
+      navigate(redirectAfterLogin);
+    }
+
+    // Check if there's a success message from signup
+    const signupSuccess = location.state?.signupSuccess;
+    if (signupSuccess) {
+      toast.success('Account created successfully! Please log in.');
+    }
+  }, [navigate, location, redirectAfterLogin]);
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
@@ -24,8 +40,8 @@ const Login: React.FC = () => {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ email }));
       
-      // Navigate to my plants page
-      navigate('/my-plants');
+      // Navigate to intended destination
+      navigate(redirectAfterLogin);
     } catch (error) {
       console.error('Login error:', error);
       toast.error('Login failed. Please check your credentials.');

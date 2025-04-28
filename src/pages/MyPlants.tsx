@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { Plant, samplePlants } from '@/data/plants';
 import PlantList from '@/components/plants/PlantList';
 import AddPlantForm from '@/components/plants/AddPlantForm';
+import ReminderManager from '@/components/plants/ReminderManager';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus } from 'lucide-react';
+import { Plus, Bell } from 'lucide-react';
 import { toast } from 'sonner';
 
 const MyPlants: React.FC = () => {
   const [myPlants, setMyPlants] = useState<Plant[]>([]);
   const [isAddingPlant, setIsAddingPlant] = useState(false);
+  const [showReminders, setShowReminders] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -33,6 +35,11 @@ const MyPlants: React.FC = () => {
       // For demo purposes, use sample plants
       setMyPlants(samplePlants);
       localStorage.setItem('myPlants', JSON.stringify(samplePlants));
+    }
+    
+    // Request notification permission for reminders
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission();
     }
   }, [navigate]);
   
@@ -71,6 +78,11 @@ const MyPlants: React.FC = () => {
       const updatedPlants = myPlants.filter(plant => plant.id !== plantId);
       setMyPlants(updatedPlants);
       localStorage.setItem('myPlants', JSON.stringify(updatedPlants));
+      
+      // Also remove any associated reminders
+      const reminders = JSON.parse(localStorage.getItem('plantReminders') || '[]');
+      const updatedReminders = reminders.filter((reminder: any) => reminder.plantId !== plantId);
+      localStorage.setItem('plantReminders', JSON.stringify(updatedReminders));
     } catch (error) {
       console.error('Delete plant error:', error);
       toast.error('Failed to delete plant. Please try again.');
@@ -87,64 +99,92 @@ const MyPlants: React.FC = () => {
               <h1 className="text-3xl font-bold mb-2">My Plants</h1>
               <p className="text-white/90">Keep track of all your plants and their care requirements</p>
             </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="mt-4 md:mt-0 bg-white text-ur-green hover:bg-ur-yellow hover:text-ur-green">
-                  <Plus className="mr-2 h-5 w-5" />
-                  Add New Plant
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg">
-                <SheetHeader>
-                  <SheetTitle>Add a new plant</SheetTitle>
-                  <SheetDescription>
-                    Fill in the details about your new plant to add it to your collection.
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-6">
-                  <AddPlantForm onAddPlant={handleAddPlant} isLoading={isAddingPlant} />
-                </div>
-              </SheetContent>
-            </Sheet>
+            <div className="flex gap-2 mt-4 md:mt-0">
+              <Button 
+                className="bg-white text-ur-green hover:bg-ur-yellow hover:text-ur-green"
+                onClick={() => setShowReminders(!showReminders)}
+              >
+                <Bell className="mr-2 h-5 w-5" />
+                {showReminders ? 'Hide Reminders' : 'View Reminders'}
+              </Button>
+              
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button className="bg-white text-ur-green hover:bg-ur-yellow hover:text-ur-green">
+                    <Plus className="mr-2 h-5 w-5" />
+                    Add New Plant
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="w-full sm:max-w-lg">
+                  <SheetHeader>
+                    <SheetTitle>Add a new plant</SheetTitle>
+                    <SheetDescription>
+                      Fill in the details about your new plant to add it to your collection.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    <AddPlantForm onAddPlant={handleAddPlant} isLoading={isAddingPlant} />
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </div>
       
       {/* Content */}
       <div className="ur-container mt-8">
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList className="w-full md:w-auto justify-start mb-6">
-            <TabsTrigger value="all">All Plants ({myPlants.length})</TabsTrigger>
-            <TabsTrigger value="herbs">Herbs</TabsTrigger>
-            <TabsTrigger value="indoors">Indoor Plants</TabsTrigger>
-            <TabsTrigger value="vegetables">Vegetables</TabsTrigger>
-          </TabsList>
+        <div className={`grid grid-cols-1 ${showReminders ? 'lg:grid-cols-3' : ''} gap-6`}>
+          <div className={showReminders ? 'lg:col-span-2' : ''}>
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="w-full md:w-auto justify-start mb-6">
+                <TabsTrigger value="all">All Plants ({myPlants.length})</TabsTrigger>
+                <TabsTrigger value="herbs">Herbs</TabsTrigger>
+                <TabsTrigger value="indoors">Indoor Plants</TabsTrigger>
+                <TabsTrigger value="vegetables">Vegetables</TabsTrigger>
+                <TabsTrigger value="medicinal">Medicinal</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="all">
+                <PlantList plants={myPlants} onDeletePlant={handleDeletePlant} />
+              </TabsContent>
+              
+              <TabsContent value="herbs">
+                <PlantList 
+                  plants={myPlants.filter(plant => plant.type === 'Herb')} 
+                  onDeletePlant={handleDeletePlant} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="indoors">
+                <PlantList 
+                  plants={myPlants.filter(plant => plant.type === 'Indoor Plant' || plant.type === 'Succulent')} 
+                  onDeletePlant={handleDeletePlant} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="vegetables">
+                <PlantList 
+                  plants={myPlants.filter(plant => plant.type === 'Vegetable' || plant.type === 'Fruit')} 
+                  onDeletePlant={handleDeletePlant} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="medicinal">
+                <PlantList 
+                  plants={myPlants.filter(plant => plant.type === 'Medicinal')} 
+                  onDeletePlant={handleDeletePlant} 
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
           
-          <TabsContent value="all">
-            <PlantList plants={myPlants} onDeletePlant={handleDeletePlant} />
-          </TabsContent>
-          
-          <TabsContent value="herbs">
-            <PlantList 
-              plants={myPlants.filter(plant => plant.type === 'Herb')} 
-              onDeletePlant={handleDeletePlant} 
-            />
-          </TabsContent>
-          
-          <TabsContent value="indoors">
-            <PlantList 
-              plants={myPlants.filter(plant => plant.type === 'Indoor Plant' || plant.type === 'Succulent')} 
-              onDeletePlant={handleDeletePlant} 
-            />
-          </TabsContent>
-          
-          <TabsContent value="vegetables">
-            <PlantList 
-              plants={myPlants.filter(plant => plant.type === 'Vegetable' || plant.type === 'Fruit')} 
-              onDeletePlant={handleDeletePlant} 
-            />
-          </TabsContent>
-        </Tabs>
+          {showReminders && (
+            <div>
+              <ReminderManager />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

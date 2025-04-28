@@ -1,13 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignupForm from '@/components/auth/SignupForm';
 import { Leaf } from 'lucide-react';
-import { toast } from 'sonner';
 
 const Signup: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Check if already logged in
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (isAuthenticated) {
+      navigate('/my-plants');
+    }
+  }, [navigate]);
 
   const handleSignup = async (name: string, email: string, password: string) => {
     setIsLoading(true);
@@ -17,15 +24,13 @@ const Signup: React.FC = () => {
       // In a real app, this would connect to Supabase Auth
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Success
-      toast.success('Account created successfully!');
-      
-      // Store authentication state (temporary for demo)
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('user', JSON.stringify({ name, email }));
-      
-      // Navigate to my plants page
-      navigate('/my-plants');
+      // Redirect to login page with success message
+      navigate('/login', { 
+        state: { 
+          signupSuccess: true,
+          email
+        } 
+      });
     } catch (error) {
       console.error('Signup error:', error);
       toast.error('Failed to create account. Please try again.');

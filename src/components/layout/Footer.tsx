@@ -88,6 +88,7 @@ const Footer: React.FC = () => {
               <p className="mb-2">UrbanRoots Garden Center</p>
               <p className="mb-2">Jabalpur - 482001, Madhya Pradesh</p>
               <p className="mb-2">Phone: +91 9301773547</p>
+              <p className="mb-2">Email: info@urbanroots.in</p>
             </address>
           </div>
         </div>
