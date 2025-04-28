@@ -86,6 +86,8 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4 font-rajdhani">Contact Us</h3>
             <address className="not-italic">
               <p className="mb-2">UrbanRoots Garden Center</p>
+              <p className="mb-2">Jabalpur - 482001, Madhya Pradesh</p>
+              <p className="mb-2">Phone: +91 9301773547</p>
             </address>
           </div>
         </div>
