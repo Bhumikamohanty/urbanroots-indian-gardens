@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignupForm from '@/components/auth/SignupForm';
 import { Leaf } from 'lucide-react';
+import { toast } from "sonner";
 
 const Signup: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
