@@ -4,6 +4,7 @@ import { VideoTutorial } from '@/data/videoTutorials';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface VideoCardProps {
   video: VideoTutorial;
@@ -12,6 +13,12 @@ interface VideoCardProps {
 const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
   const handleWatchNow = () => {
     window.open(video.videoUrl, '_blank');
+    toast.success(`Opening YouTube: ${video.title}`);
+  };
+
+  const handleThumbnailClick = () => {
+    window.open(video.videoUrl, '_blank');
+    toast.success(`Opening YouTube: ${video.title}`);
   };
 
   return (
@@ -20,10 +27,14 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
         <img 
           src={video.thumbnailUrl} 
           alt={video.title} 
-          className="w-full h-full object-cover opacity-90 hover-grow"
+          className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
+          onClick={handleThumbnailClick}
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors cursor-pointer">
+          <div 
+            className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors cursor-pointer"
+            onClick={handleThumbnailClick}
+          >
             <Play fill="#6AB04A" className="h-6 w-6 text-ur-green ml-1" />
           </div>
         </div>
