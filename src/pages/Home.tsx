@@ -113,7 +113,7 @@ const Home: React.FC = () => {
             <div className="ur-card overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://www.teojooguan.com/wp-content/uploads/2022/05/aloe-vera-plant-pot.jpg"
+                  src="https://plantlife.ie/wp-content/uploads/2022/10/alar1535__000000.jpg"
                   alt="Aloe Vera"
                   className="w-full h-full object-cover hover-grow"
                 />
