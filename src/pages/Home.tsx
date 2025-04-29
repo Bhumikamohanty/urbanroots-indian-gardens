@@ -92,7 +92,7 @@ const Home: React.FC = () => {
             <div className="ur-card overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1596634608283-8c6ab1a0a1ae?q=80&w=500&auto=format&fit=crop"
+                  src="https://cdn.shopify.com/s/files/1/0573/3993/6868/t/6/assets/holy-basil-herb1-1667586689480.jpg?v=1667586690"
                   alt="Tulsi"
                   className="w-full h-full object-cover hover-grow"
                 />
@@ -113,7 +113,7 @@ const Home: React.FC = () => {
             <div className="ur-card overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1596738317850-6a8690ec7d6f?q=80&w=500&auto=format&fit=crop"
+                  src="https://www.teojooguan.com/wp-content/uploads/2022/05/aloe-vera-plant-pot.jpg"
                   alt="Aloe Vera"
                   className="w-full h-full object-cover hover-grow"
                 />
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
             <div className="ur-card overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1563804447974-0e7163fb74aa?q=80&w=500&auto=format&fit=crop"
+                  src="https://5.imimg.com/data5/SELLER/Default/2020/8/XQ/ED/UW/106270270/mint-pudina-.jpg"
                   alt="Mint"
                   className="w-full h-full object-cover hover-grow"
                 />
@@ -155,7 +155,7 @@ const Home: React.FC = () => {
             <div className="ur-card overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1589918239875-dabb266c523c?q=80&w=500&auto=format&fit=crop"
+                  src="https://www.teojooguan.com/wp-content/uploads/2020/09/Curry-Leaves-Plant.jpeg"
                   alt="Curry Leaves"
                   className="w-full h-full object-cover hover-grow"
                 />
