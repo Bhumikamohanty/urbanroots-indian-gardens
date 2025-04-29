@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Leaf, ShoppingCart, BookOpen } from 'lucide-react';
+import { Leaf, ShoppingCart, BookOpen, Download } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
@@ -180,6 +180,68 @@ const Home: React.FC = () => {
                 View All Plants
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Balcony Garden Guide Section - Adding PDF links here */}
+      <section className="ur-section bg-ur-blue/10">
+        <div className="ur-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="ur-section-title mb-4">Balcony Garden Guide</h2>
+              <p className="text-gray-700 mb-6">
+                Complete PDF guide for setting up your first balcony garden in Indian apartments.
+                Download our comprehensive guides to get started on your gardening journey.
+              </p>
+              <div className="space-y-4">
+                <a 
+                  href="https://www.kellogggarden.com/wp-content/uploads/2020/05/Container-Gardening-Guide.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-3 border border-ur-green/30 rounded-lg bg-white hover:bg-ur-green/5 transition-colors"
+                >
+                  <Download className="h-5 w-5 text-ur-green mr-3" />
+                  <div>
+                    <h3 className="font-medium text-ur-green">Container Gardening Guide</h3>
+                    <p className="text-sm text-gray-600">Learn how to grow plants in containers</p>
+                  </div>
+                </a>
+                
+                <a 
+                  href="https://www.kellogggarden.com/wp-content/uploads/2020/05/Container-Gardening-Guide.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-3 border border-ur-green/30 rounded-lg bg-white hover:bg-ur-green/5 transition-colors"
+                >
+                  <Download className="h-5 w-5 text-ur-green mr-3" />
+                  <div>
+                    <h3 className="font-medium text-ur-green">Balcony Herb Garden Guide</h3>
+                    <p className="text-sm text-gray-600">Tips for growing herbs in limited spaces</p>
+                  </div>
+                </a>
+                
+                <a 
+                  href="https://www.researchgate.net/publication/341778484_Balcony_Gardening_of_Vegetable_Crops"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-3 border border-ur-green/30 rounded-lg bg-white hover:bg-ur-green/5 transition-colors"
+                >
+                  <Download className="h-5 w-5 text-ur-green mr-3" />
+                  <div>
+                    <h3 className="font-medium text-ur-green">Vegetable Balcony Gardening</h3>
+                    <p className="text-sm text-gray-600">Research guide for growing vegetables</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div className="hidden md:block">
+              <img 
+                src="https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?q=80&w=800&auto=format&fit=crop" 
+                alt="Balcony Garden Guide" 
+                className="rounded-lg shadow-lg"
+              />
+            </div>
           </div>
         </div>
       </section>
