@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plant } from '@/data/plants';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trash2, Bell, Calendar, MoreVertical } from 'lucide-react';
+import { Trash2, Bell, Calendar, MoreVertical, Flower, CloudRain, Sprout } from 'lucide-react';
 import { toast } from 'sonner';
 import { 
   Dialog, 
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { PlantReminder, ReminderType, reminderTypeLabels, defaultReminders } from '@/data/reminderTypes';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
 
 interface PlantCardProps {
   plant: Plant;
@@ -24,6 +25,14 @@ interface PlantCardProps {
 const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
   const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [plantReminders, setPlantReminders] = useState<PlantReminder[]>([]);
+  
+  useEffect(() => {
+    // Load all reminders and filter for this specific plant
+    const allReminders: PlantReminder[] = JSON.parse(localStorage.getItem('plantReminders') || '[]');
+    const thisPlantReminders = allReminders.filter(r => r.plantId === plant.id);
+    setPlantReminders(thisPlantReminders);
+  }, [plant.id]);
   
   const handleDelete = () => {
     onDelete(plant.id);
@@ -51,6 +60,9 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
     // Add new reminder
     const updatedReminders = [...existingReminders, newReminder];
     localStorage.setItem('plantReminders', JSON.stringify(updatedReminders));
+    
+    // Update local state
+    setPlantReminders([...plantReminders, newReminder]);
     
     // Request notification permission if not granted yet
     if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
@@ -84,6 +96,23 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
     
     return typeMap[plant.type] || 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=500&auto=format&fit=crop';
   };
+
+  // Get icons for reminder types
+  const getReminderIcon = (type: ReminderType) => {
+    switch (type) {
+      case 'water':
+        return <CloudRain className="h-3 w-3 mr-1" />;
+      case 'fertilize':
+        return <Sprout className="h-3 w-3 mr-1" />;
+      case 'prune':
+        return <Trash2 className="h-3 w-3 mr-1" />;
+      default:
+        return <Bell className="h-3 w-3 mr-1" />;
+    }
+  };
+
+  // Count active reminders
+  const activeReminders = plantReminders.filter(r => r.enabled).length;
 
   return (
     <Card className="ur-card hover-glow animate-fade-in">
@@ -122,6 +151,30 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
           <p className="text-sm"><span className="font-medium">Sunlight:</span> {plant.sunlight}</p>
           <p className="text-sm"><span className="font-medium">Added on:</span> {formattedDate}</p>
         </div>
+        
+        {/* Plant-specific reminders list */}
+        {plantReminders.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <h4 className="text-sm font-medium flex items-center mb-2">
+              <Bell className="h-4 w-4 mr-1 text-ur-orange" />
+              Plant Reminders ({activeReminders})
+            </h4>
+            <div className="flex flex-wrap gap-1">
+              {plantReminders.map(reminder => (
+                reminder.enabled && (
+                  <Badge 
+                    key={reminder.id} 
+                    variant="outline"
+                    className="text-xs py-0"
+                  >
+                    {getReminderIcon(reminder.type as ReminderType)}
+                    {reminderTypeLabels[reminder.type as ReminderType]}
+                  </Badge>
+                )
+              ))}
+            </div>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between">
         <Button variant="outline" className="text-ur-blue border-ur-blue hover:bg-ur-blue hover:text-white">
@@ -144,7 +197,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
                   className="flex-col h-24 space-y-2"
                   onClick={() => handleCreateReminder(type)}
                 >
-                  <Bell className="h-6 w-6 text-ur-green" />
+                  {getReminderIcon(type)}
                   <span>{reminderTypeLabels[type]}</span>
                 </Button>
               ))}

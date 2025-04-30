@@ -7,6 +7,14 @@ export interface Plant {
   waterFrequency: string;
   sunlight: string;
   dateAdded: string;
+  reminders?: PlantReminder[];
+}
+
+export interface PlantReminder {
+  id: string;
+  type: string;
+  nextDue: string;
+  completed: boolean;
 }
 
 // Sample plants data for demo

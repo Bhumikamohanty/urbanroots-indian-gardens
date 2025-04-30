@@ -1,12 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { PlantReminder, reminderTypeLabels } from '@/data/reminderTypes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bell, Trash2, Check, Calendar, AlertTriangle, CloudRain, Sun, CloudSun } from 'lucide-react';
+import { Bell, Trash2, Check, Calendar, AlertTriangle, CloudRain, Sun, CloudSun, Flower, Sprout } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import { Plant } from '@/data/plants';
 
 interface ReminderManagerProps {
   className?: string;
@@ -25,9 +27,12 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
   const [showCompleted, setShowCompleted] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [locationPermission, setLocationPermission] = useState<boolean>(false);
+  const [plantList, setPlantList] = useState<Plant[]>([]);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
   
   useEffect(() => {
     loadReminders();
+    loadPlants();
     
     // Check for notification permission
     if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
@@ -56,6 +61,17 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
     
     return () => clearInterval(checkInterval);
   }, []);
+  
+  const loadPlants = () => {
+    try {
+      const stored = localStorage.getItem('myPlants');
+      if (stored) {
+        setPlantList(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error('Failed to load plants:', error);
+    }
+  };
   
   const fetchWeatherData = async (latitude: number, longitude: number) => {
     try {
@@ -210,20 +226,28 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
     });
   };
   
-  // Filter reminders based on showCompleted setting
+  // Filter reminders based on showCompleted setting and active plant filter
   const filteredReminders = reminders.filter(reminder => {
+    // First apply completed filter
     if (!showCompleted) {
-      // If not showing completed, check if it's due
       const now = new Date();
       const nextDue = new Date(reminder.nextDue);
       
       if (reminder.lastCompleted) {
         const lastCompleted = new Date(reminder.lastCompleted);
-        return nextDue <= now && lastCompleted < nextDue;
+        if (!(nextDue <= now && lastCompleted < nextDue)) {
+          return false;
+        }
+      } else if (!(nextDue <= now)) {
+        return false;
       }
-      
-      return nextDue <= now;
     }
+    
+    // Then apply plant filter if active
+    if (activeFilter) {
+      return reminder.plantId === activeFilter;
+    }
+    
     return true;
   });
   
@@ -231,6 +255,35 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
   const sortedReminders = [...filteredReminders].sort((a, b) => {
     return new Date(a.nextDue).getTime() - new Date(b.nextDue).getTime();
   });
+  
+  // Group reminders by plant
+  const remindersByPlant = sortedReminders.reduce((groups, reminder) => {
+    const plantId = reminder.plantId;
+    if (!groups[plantId]) {
+      groups[plantId] = [];
+    }
+    groups[plantId].push(reminder);
+    return groups;
+  }, {} as Record<string, PlantReminder[]>);
+
+  // Get count of unique plants with reminders
+  const plantsWithReminders = new Set(reminders.map(r => r.plantId)).size;
+  
+  // Get appropriate icon for reminder type
+  const getReminderIcon = (type: string) => {
+    switch(type) {
+      case 'water':
+        return <CloudRain className="h-4 w-4 text-blue-500" />;
+      case 'fertilize':
+        return <Sprout className="h-4 w-4 text-green-500" />;
+      case 'prune':
+        return <Flower className="h-4 w-4 text-purple-500" />;
+      case 'repot':
+        return <Flower className="h-4 w-4 text-brown-500" />;
+      default:
+        return <Bell className="h-4 w-4 text-gray-500" />;
+    }
+  };
 
   return (
     <Card className={className}>
@@ -278,91 +331,126 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
           </div>
         )}
         
+        {/* Plant filter buttons */}
+        {plantsWithReminders > 1 && (
+          <div className="mb-4">
+            <h4 className="text-sm font-medium mb-2">Filter by plant:</h4>
+            <div className="flex flex-wrap gap-2">
+              <Button 
+                variant={activeFilter === null ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveFilter(null)}
+                className="text-xs"
+              >
+                All Plants
+              </Button>
+              
+              {plantList
+                .filter(plant => reminders.some(r => r.plantId === plant.id))
+                .map(plant => (
+                  <Button
+                    key={plant.id}
+                    variant={activeFilter === plant.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setActiveFilter(plant.id)}
+                    className="text-xs"
+                  >
+                    {plant.name}
+                  </Button>
+                ))
+              }
+            </div>
+          </div>
+        )}
+        
         <ScrollArea className="h-[400px] pr-4">
-          {sortedReminders.length === 0 ? (
+          {Object.keys(remindersByPlant).length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               <Calendar className="mx-auto h-12 w-12 opacity-20 mb-2" />
               <p>No reminders found</p>
               <p className="text-sm mt-1">Add reminders from your plant cards</p>
             </div>
           ) : (
-            <div className="space-y-3">
-              {sortedReminders.map(reminder => {
-                const isOverdue = new Date(reminder.nextDue) < new Date() && 
-                  (!reminder.lastCompleted || new Date(reminder.lastCompleted) < new Date(reminder.nextDue));
-                
-                // Conditionally adjust the card style based on weather and reminder type
-                let cardStyle = `p-3 border rounded-lg flex items-center justify-between ${
-                  isOverdue ? 'border-red-200 bg-red-50' : 'border-gray-200'
-                } ${!reminder.enabled ? 'opacity-60' : ''}`;
-                
-                if (weatherData && reminder.type === 'water') {
-                  if (weatherData.isRainy) {
-                    cardStyle = `p-3 border rounded-lg flex items-center justify-between border-blue-200 bg-blue-50/30 ${!reminder.enabled ? 'opacity-60' : ''}`;
-                  } else if (weatherData.isSunny && weatherData.temperature > 32) {
-                    cardStyle = `p-3 border rounded-lg flex items-center justify-between border-yellow-200 bg-yellow-50/30 ${!reminder.enabled ? 'opacity-60' : ''}`;
-                  }
-                }
+            <div className="space-y-6">
+              {Object.entries(remindersByPlant).map(([plantId, plantReminders]) => {
+                const plant = plantList.find(p => p.id === plantId);
                 
                 return (
-                  <div key={reminder.id} className={cardStyle}>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center">
-                        <h4 className="font-medium text-sm truncate">{reminder.plantName}</h4>
-                        {isOverdue && (
-                          <Badge variant="destructive" className="ml-2 px-1 py-0 h-5">
-                            <AlertTriangle className="h-3 w-3 mr-1" />
-                            Overdue
-                          </Badge>
-                        )}
-                        
-                        {weatherData && reminder.type === 'water' && weatherData.isRainy && (
-                          <Badge variant="outline" className="ml-2 px-1 py-0 h-5 text-blue-600 border-blue-200 bg-blue-50">
-                            <CloudRain className="h-3 w-3 mr-1" />
-                            Rainy
-                          </Badge>
-                        )}
-                        
-                        {weatherData && reminder.type === 'water' && weatherData.isSunny && weatherData.temperature > 32 && (
-                          <Badge variant="outline" className="ml-2 px-1 py-0 h-5 text-yellow-600 border-yellow-200 bg-yellow-50">
-                            <Sun className="h-3 w-3 mr-1" />
-                            Hot
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-500 truncate">
-                        {reminderTypeLabels[reminder.type]}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        Every {reminder.frequency} days
-                        {weatherData && reminder.type === 'water' && weatherData.isRainy && ' (skip today)'}
-                        {weatherData && reminder.type === 'water' && weatherData.isSunny && weatherData.temperature > 32 && ' (water now)'}
-                      </p>
-                    </div>
+                  <div key={plantId} className="border border-gray-200 rounded-lg p-3">
+                    <h3 className="font-medium text-ur-green mb-2 flex items-center">
+                      <Flower className="h-4 w-4 mr-2" />
+                      {plant ? plant.name : plantReminders[0].plantName}
+                    </h3>
                     
-                    <div className="flex gap-1 ml-2">
-                      <Switch
-                        checked={reminder.enabled}
-                        onCheckedChange={(checked) => handleToggleReminder(reminder.id, checked)}
-                        className="mr-1"
-                      />
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
-                        className="h-8 w-8 text-green-600"
-                        onClick={() => handleCompleteReminder(reminder)}
-                        disabled={!reminder.enabled}
-                      >
-                        <Check className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
-                        className="h-8 w-8 text-red-600"
-                        onClick={() => handleDeleteReminder(reminder.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <div className="space-y-2">
+                      {plantReminders.map(reminder => {
+                        const isOverdue = new Date(reminder.nextDue) < new Date() && 
+                          (!reminder.lastCompleted || new Date(reminder.lastCompleted) < new Date(reminder.nextDue));
+                        
+                        // Conditionally adjust the card style based on weather and reminder type
+                        let cardStyle = `p-2 border rounded-lg flex items-center justify-between ${
+                          isOverdue ? 'border-red-200 bg-red-50' : 'border-gray-200'
+                        } ${!reminder.enabled ? 'opacity-60' : ''}`;
+                        
+                        if (weatherData && reminder.type === 'water') {
+                          if (weatherData.isRainy) {
+                            cardStyle = `p-2 border rounded-lg flex items-center justify-between border-blue-200 bg-blue-50/30 ${!reminder.enabled ? 'opacity-60' : ''}`;
+                          } else if (weatherData.isSunny && weatherData.temperature > 32) {
+                            cardStyle = `p-2 border rounded-lg flex items-center justify-between border-yellow-200 bg-yellow-50/30 ${!reminder.enabled ? 'opacity-60' : ''}`;
+                          }
+                        }
+                        
+                        return (
+                          <div key={reminder.id} className={cardStyle}>
+                            <div className="flex-1 min-w-0 flex items-center">
+                              <div className="mr-3">
+                                {getReminderIcon(reminder.type)}
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium">
+                                  {reminderTypeLabels[reminder.type as keyof typeof reminderTypeLabels]}
+                                  {isOverdue && (
+                                    <Badge variant="destructive" className="ml-2 px-1 py-0 h-5">
+                                      <AlertTriangle className="h-3 w-3 mr-1" />
+                                      Overdue
+                                    </Badge>
+                                  )}
+                                </p>
+                                <p className="text-xs text-gray-400">
+                                  Every {reminder.frequency} days
+                                  {weatherData && reminder.type === 'water' && weatherData.isRainy && ' (skip today)'}
+                                  {weatherData && reminder.type === 'water' && weatherData.isSunny && weatherData.temperature > 32 && ' (water now)'}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-1 ml-2">
+                              <Switch
+                                checked={reminder.enabled}
+                                onCheckedChange={(checked) => handleToggleReminder(reminder.id, checked)}
+                                className="mr-1"
+                              />
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-8 w-8 text-green-600"
+                                onClick={() => handleCompleteReminder(reminder)}
+                                disabled={!reminder.enabled}
+                              >
+                                <Check className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-8 w-8 text-red-600"
+                                onClick={() => handleDeleteReminder(reminder.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
