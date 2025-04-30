@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ShopItem as ShopItemType } from '@/data/shopItems';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,17 +11,35 @@ interface ShopItemProps {
 }
 
 const ShopItem: React.FC<ShopItemProps> = ({ item }) => {
+  const [imageError, setImageError] = useState(false);
+  
   const handleAddToCart = () => {
     toast.success(`${item.name} added to cart!`);
+  };
+
+  // Get fallback image based on category
+  const getFallbackImage = () => {
+    const categoryMap: Record<string, string> = {
+      'Plant': "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=800&auto=format&fit=crop",
+      'Tool': "https://images.unsplash.com/photo-1617692855273-2f6b7a874b1d?q=80&w=800&auto=format&fit=crop",
+      'Soil': "https://images.unsplash.com/photo-1598900438157-e450a5dfda0d?q=80&w=800&auto=format&fit=crop",
+      'Pot': "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=800&auto=format&fit=crop",
+      'Kit': "https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?q=80&w=800&auto=format&fit=crop",
+      'Fertilizer': "https://images.unsplash.com/photo-1598900438053-9e8f17c243ce?q=80&w=800&auto=format&fit=crop",
+      'Pesticide': "https://images.unsplash.com/photo-1593883698744-5f4536439ed5?q=80&w=800&auto=format&fit=crop",
+    };
+    
+    return categoryMap[item.category] || "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=800&auto=format&fit=crop";
   };
 
   return (
     <Card className="ur-card hover-glow animate-fade-in">
       <div className="h-48 overflow-hidden">
         <img 
-          src={item.image} 
+          src={imageError ? getFallbackImage() : item.image} 
           alt={item.name} 
           className="w-full h-full object-cover hover-grow"
+          onError={() => setImageError(true)}
         />
       </div>
       <CardContent className="p-4">
