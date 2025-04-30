@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PlantReminder, reminderTypeLabels } from '@/data/reminderTypes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -272,7 +271,7 @@ const ReminderManager: React.FC<ReminderManagerProps> = ({ className }) => {
                   <p className="text-xs text-gray-500">{weatherData.temperature}°C, {weatherData.humidity}% Humidity</p>
                 </div>
               </div>
-              <Badge variant={weatherData.isRainy ? "info" : "secondary"} className="px-2">
+              <Badge variant={weatherData.isRainy ? "outline" : "secondary"} className="px-2">
                 {weatherData.isRainy ? 'Skip Watering Today' : weatherData.isSunny ? 'Water Earlier' : 'Regular Schedule'}
               </Badge>
             </div>
