@@ -74,12 +74,12 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
   // Fallback image based on plant type
   const getFallbackImage = () => {
     const typeMap: Record<string, string> = {
-      'Herb': 'https://images.unsplash.com/photo-1563804447974-0e7163fb74aa?q=80&w=500&auto=format&fit=crop',
-      'Succulent': 'https://images.unsplash.com/photo-1596738317850-6a8690ec7d6f?q=80&w=500&auto=format&fit=crop',
-      'Indoor Plant': 'https://images.unsplash.com/photo-1593691509543-c55fb32d8de5?q=80&w=500&auto=format&fit=crop',
-      'Vegetable': 'https://images.unsplash.com/photo-1592841200221-a4f8cad509a4?q=80&w=500&auto=format&fit=crop',
-      'Fruit': 'https://images.unsplash.com/photo-1572364709125-9a4557550efb?q=80&w=500&auto=format&fit=crop',
-      'Medicinal': 'https://images.unsplash.com/photo-1550082579-c12ceadc0d49?q=80&w=500&auto=format&fit=crop'
+      'Herb': "https://cdn.shopify.com/s/files/1/0573/3993/6868/t/6/assets/holy-basil-herb1-1667586689480.jpg?v=1667586690",
+      'Succulent': "https://plantlife.ie/wp-content/uploads/2022/10/alar1535__000000.jpg",
+      'Indoor Plant': "https://images.unsplash.com/photo-1593691509543-c55fb32d8de5?q=80&w=500&auto=format&fit=crop",
+      'Vegetable': "https://images.unsplash.com/photo-1592841200221-a4f8cad509a4?q=80&w=500&auto=format&fit=crop",
+      'Fruit': "https://images.unsplash.com/photo-1572364709125-9a4557550efb?q=80&w=500&auto=format&fit=crop",
+      'Medicinal': "https://plantlife.ie/wp-content/uploads/2022/10/alar1535__000000.jpg"
     };
     
     return typeMap[plant.type] || 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=500&auto=format&fit=crop';

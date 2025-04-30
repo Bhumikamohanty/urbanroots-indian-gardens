@@ -15,7 +15,7 @@ export const samplePlants: Plant[] = [
     id: "1",
     name: "Tulsi (Holy Basil)",
     type: "Herb",
-    image: "https://images.unsplash.com/photo-1596634608283-8c6ab1a0a1ae?q=80&w=500&auto=format&fit=crop",
+    image: "https://cdn.shopify.com/s/files/1/0573/3993/6868/t/6/assets/holy-basil-herb1-1667586689480.jpg?v=1667586690",
     waterFrequency: "Every 2-3 days",
     sunlight: "Full Sun",
     dateAdded: "2023-04-15"
@@ -24,7 +24,7 @@ export const samplePlants: Plant[] = [
     id: "2",
     name: "Aloe Vera",
     type: "Succulent",
-    image: "https://images.unsplash.com/photo-1596738317850-6a8690ec7d6f?q=80&w=500&auto=format&fit=crop",
+    image: "https://plantlife.ie/wp-content/uploads/2022/10/alar1535__000000.jpg",
     waterFrequency: "Every 2 weeks",
     sunlight: "Partial Sun",
     dateAdded: "2023-03-22"
@@ -33,7 +33,7 @@ export const samplePlants: Plant[] = [
     id: "3",
     name: "Mint (Pudina)",
     type: "Herb",
-    image: "https://images.unsplash.com/photo-1563804447974-0e7163fb74aa?q=80&w=500&auto=format&fit=crop",
+    image: "https://5.imimg.com/data5/SELLER/Default/2020/8/XQ/ED/UW/106270270/mint-pudina-.jpg",
     waterFrequency: "Every 1-2 days",
     sunlight: "Partial to Full Sun",
     dateAdded: "2023-05-10"
@@ -58,10 +58,10 @@ export const samplePlants: Plant[] = [
   },
   {
     id: "6",
-    name: "Tomato Plant",
-    type: "Vegetable",
-    image: "https://images.unsplash.com/photo-1592841200221-a4f8cad509a4?q=80&w=500&auto=format&fit=crop",
-    waterFrequency: "Every 1-2 days",
+    name: "Curry Leaves",
+    type: "Herb",
+    image: "https://www.teojooguan.com/wp-content/uploads/2020/09/Curry-Leaves-Plant.jpeg",
+    waterFrequency: "Every 3-4 days",
     sunlight: "Full Sun",
     dateAdded: "2023-03-10"
   }
