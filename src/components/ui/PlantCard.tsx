@@ -23,6 +23,7 @@ interface PlantCardProps {
 
 const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
   const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   const handleDelete = () => {
     onDelete(plant.id);
@@ -70,13 +71,28 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onDelete }) => {
     year: 'numeric',
   });
 
+  // Fallback image based on plant type
+  const getFallbackImage = () => {
+    const typeMap: Record<string, string> = {
+      'Herb': 'https://images.unsplash.com/photo-1563804447974-0e7163fb74aa?q=80&w=500&auto=format&fit=crop',
+      'Succulent': 'https://images.unsplash.com/photo-1596738317850-6a8690ec7d6f?q=80&w=500&auto=format&fit=crop',
+      'Indoor Plant': 'https://images.unsplash.com/photo-1593691509543-c55fb32d8de5?q=80&w=500&auto=format&fit=crop',
+      'Vegetable': 'https://images.unsplash.com/photo-1592841200221-a4f8cad509a4?q=80&w=500&auto=format&fit=crop',
+      'Fruit': 'https://images.unsplash.com/photo-1572364709125-9a4557550efb?q=80&w=500&auto=format&fit=crop',
+      'Medicinal': 'https://images.unsplash.com/photo-1550082579-c12ceadc0d49?q=80&w=500&auto=format&fit=crop'
+    };
+    
+    return typeMap[plant.type] || 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=500&auto=format&fit=crop';
+  };
+
   return (
     <Card className="ur-card hover-glow animate-fade-in">
       <div className="h-48 overflow-hidden">
         <img 
-          src={plant.image} 
+          src={imageError ? getFallbackImage() : plant.image} 
           alt={plant.name} 
           className="w-full h-full object-cover hover-grow"
+          onError={() => setImageError(true)}
         />
       </div>
       <CardContent className="p-4">

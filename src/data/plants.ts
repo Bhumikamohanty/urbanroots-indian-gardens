@@ -37,5 +37,32 @@ export const samplePlants: Plant[] = [
     waterFrequency: "Every 1-2 days",
     sunlight: "Partial to Full Sun",
     dateAdded: "2023-05-10"
+  },
+  {
+    id: "4",
+    name: "Coriander",
+    type: "Herb",
+    image: "https://images.unsplash.com/photo-1617922631378-5ec3caa1abba?q=80&w=500&auto=format&fit=crop",
+    waterFrequency: "Every 1-2 days",
+    sunlight: "Partial Sun",
+    dateAdded: "2023-06-05"
+  },
+  {
+    id: "5",
+    name: "Snake Plant",
+    type: "Indoor Plant",
+    image: "https://images.unsplash.com/photo-1593691509543-c55fb32d8de5?q=80&w=500&auto=format&fit=crop",
+    waterFrequency: "Every 2-3 weeks",
+    sunlight: "Low to Medium Light",
+    dateAdded: "2023-02-15"
+  },
+  {
+    id: "6",
+    name: "Tomato Plant",
+    type: "Vegetable",
+    image: "https://images.unsplash.com/photo-1592841200221-a4f8cad509a4?q=80&w=500&auto=format&fit=crop",
+    waterFrequency: "Every 1-2 days",
+    sunlight: "Full Sun",
+    dateAdded: "2023-03-10"
   }
 ];
