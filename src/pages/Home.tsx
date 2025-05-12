@@ -2,7 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Leaf, ShoppingCart, BookOpen, Download } from 'lucide-react';
+import { Leaf, ShoppingCart, BookOpen, Download, MessageSquare, Layers } from 'lucide-react';
+import SeasonalTipsCarousel from '@/components/home/SeasonalTipsCarousel';
 
 const Home: React.FC = () => {
   return (
@@ -44,6 +45,13 @@ const Home: React.FC = () => {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Seasonal Tips Carousel - NEW SECTION */}
+      <section className="ur-section bg-white">
+        <div className="ur-container">
+          <SeasonalTipsCarousel />
         </div>
       </section>
 
@@ -184,7 +192,42 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Balcony Garden Guide Section - Adding PDF links here */}
+      {/* New Call-to-Action for Gardening Preferences & Community */}
+      <section className="ur-section bg-ur-blue/10">
+        <div className="ur-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm hover-lift">
+              <Layers className="h-12 w-12 text-ur-green mb-4" />
+              <h3 className="text-xl font-bold text-ur-green mb-2">Set Your Garden Preferences</h3>
+              <p className="text-gray-700 mb-6">
+                Tell us about your space, location, and goals to receive personalized plant recommendations 
+                and gardening tips tailored to your specific needs.
+              </p>
+              <Link to="/preferences">
+                <Button className="bg-ur-green hover:bg-ur-green/90 text-white">
+                  Customize Your Garden
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm hover-lift">
+              <MessageSquare className="h-12 w-12 text-ur-green mb-4" />
+              <h3 className="text-xl font-bold text-ur-green mb-2">Join Our Gardening Community</h3>
+              <p className="text-gray-700 mb-6">
+                Connect with fellow gardening enthusiasts, share your experiences, ask questions,
+                and discover creative garden setups from across India.
+              </p>
+              <Link to="/community">
+                <Button className="bg-ur-green hover:bg-ur-green/90 text-white">
+                  Explore Community
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Balcony Garden Guide Section */}
       <section className="ur-section bg-ur-blue/10">
         <div className="ur-container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

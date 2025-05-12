@@ -13,6 +13,8 @@ import Signup from "./pages/Signup";
 import MyPlants from "./pages/MyPlants";
 import Shop from "./pages/Shop";
 import Learn from "./pages/Learn";
+import Community from "./pages/Community";
+import GardeningPreferences from "./pages/GardeningPreferences";
 import NotFound from "./pages/NotFound";
 import { toast } from "sonner";
 
@@ -71,6 +73,12 @@ const AppContent = () => {
           } />
           <Route path="/shop" element={<Shop />} />
           <Route path="/learn" element={<Learn />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/preferences" element={
+            <ProtectedRoute>
+              <GardeningPreferences />
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
