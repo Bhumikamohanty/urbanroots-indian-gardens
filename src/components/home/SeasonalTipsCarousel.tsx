@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Sun, CloudSun, CloudMoonRain, Layers } from 'lucide-react';
+import { Sun, CloudSun, CloudMoonRain, Layers, Sprout, Recycle } from 'lucide-react';
 
 interface SeasonalTip {
   id: string;
@@ -14,13 +14,13 @@ interface SeasonalTip {
   season?: 'spring' | 'summer' | 'monsoon' | 'autumn' | 'winter';
 }
 
-// Sample seasonal tips data
+// Updated seasonal tips data with better images
 const seasonalTipsData: SeasonalTip[] = [
   {
     id: '1',
     title: 'Summer Gardening Tips',
     description: 'Protect your plants from extreme heat with these simple steps. Use shade cloth for delicate plants, water early morning or evening, and mulch to retain moisture.',
-    image: 'https://images.unsplash.com/photo-1533038590840-1771779124a5?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=800&auto=format&fit=crop',
     category: 'seasonal',
     season: 'summer'
   },
@@ -28,7 +28,7 @@ const seasonalTipsData: SeasonalTip[] = [
     id: '2',
     title: 'Monsoon Plant Care',
     description: 'Keep your plants healthy during heavy rains by ensuring proper drainage, checking for fungus, and protecting from waterlogging.',
-    image: 'https://images.unsplash.com/photo-1515470181798-4f6793db4562?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?q=80&w=800&auto=format&fit=crop',
     category: 'seasonal',
     season: 'monsoon'
   },
@@ -36,21 +36,21 @@ const seasonalTipsData: SeasonalTip[] = [
     id: '3',
     title: 'DIY Upcycled Pot Ideas',
     description: 'Transform everyday household items into beautiful plant containers. Turn old buckets, cans, plastic bottles, and even broken ceramics into unique planters.',
-    image: 'https://images.unsplash.com/photo-1610890547793-bc215d8e0702?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=800&auto=format&fit=crop',
     category: 'diy'
   },
   {
     id: '4',
     title: 'Eco-friendly Pest Repellents',
     description: 'Make your own natural pest repellents using common kitchen ingredients like neem oil, garlic, chili powder, and vinegar.',
-    image: 'https://images.unsplash.com/photo-1587334207810-9fc3e202dea9?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?q=80&w=800&auto=format&fit=crop',
     category: 'eco'
   },
   {
     id: '5',
     title: 'Winter Plant Protection',
     description: 'Shield sensitive plants from cold weather by moving them indoors, using jute covers at night, and reducing watering frequency.',
-    image: 'https://images.unsplash.com/photo-1602940659805-2aa8002d22e8?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=800&auto=format&fit=crop',
     category: 'seasonal',
     season: 'winter'
   },
@@ -58,7 +58,7 @@ const seasonalTipsData: SeasonalTip[] = [
     id: '6',
     title: 'Homemade Compost Guide',
     description: 'Create nutrient-rich compost from kitchen scraps and garden waste. Learn the layering technique, proper moisture maintenance, and turning schedule.',
-    image: 'https://images.unsplash.com/photo-1602108987428-4768d7c7ecbe?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop',
     category: 'eco'
   }
 ];
@@ -77,7 +77,14 @@ const getCurrentSeason = (): 'spring' | 'summer' | 'monsoon' | 'autumn' | 'winte
 
 // Get seasonal icon based on season
 const getSeasonalIcon = (category: string, season?: string) => {
-  if (category !== 'seasonal') return <Layers className="h-5 w-5" />;
+  if (category !== 'seasonal') {
+    if (category === 'diy') {
+      return <Sprout className="h-5 w-5" />;
+    } else if (category === 'eco') {
+      return <Recycle className="h-5 w-5" />;
+    }
+    return <Layers className="h-5 w-5" />;
+  }
   
   switch (season) {
     case 'summer':
@@ -147,7 +154,7 @@ const SeasonalTipsCarousel: React.FC = () => {
                   <img 
                     src={tip.image} 
                     alt={tip.title} 
-                    className="w-full h-full object-cover hover-grow" 
+                    className="w-full h-full object-cover hover-grow transition-transform duration-300" 
                   />
                 </div>
                 <CardContent className="p-4">
