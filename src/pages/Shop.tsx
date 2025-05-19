@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { shopItems, shopCategories } from '@/data/shopItems';
 import ShopItem from '@/components/ui/ShopItem';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Search, SlidersHorizontal, Leaf, FlowerIcon, Soil, Plant } from 'lucide-react';
+import { Search, SlidersHorizontal, Leaf, FlowerIcon, Sprout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -72,7 +71,7 @@ const Shop: React.FC = () => {
     },
     { 
       name: "Soil & Cocopeat", 
-      icon: <Soil className="h-5 w-5" />,
+      icon: <Leaf className="h-5 w-5" />,
       image: "/lovable-uploads/aa9ce943-6592-4572-aa4e-34e05202603c.png",
       description: "Nutrient-rich growing medium for healthy plants"
     },
@@ -84,7 +83,7 @@ const Shop: React.FC = () => {
     },
     { 
       name: "Garden Tools", 
-      icon: <Plant className="h-5 w-5" />,
+      icon: <Sprout className="h-5 w-5" />,
       image: "/lovable-uploads/9644e160-4ea7-422d-a85f-7b3f4d30a65e.png",
       description: "Quality pruning tools for plant maintenance"
     }
