@@ -15,6 +15,7 @@ import Shop from "./pages/Shop";
 import Learn from "./pages/Learn";
 import Community from "./pages/Community";
 import GardeningPreferences from "./pages/GardeningPreferences";
+import GardenCuration from "./pages/GardenCuration";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
@@ -81,6 +82,7 @@ const AppContent = () => {
               <GardeningPreferences />
             </ProtectedRoute>
           } />
+          <Route path="/garden-curation" element={<GardenCuration />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
