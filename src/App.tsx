@@ -16,6 +16,8 @@ import Learn from "./pages/Learn";
 import Community from "./pages/Community";
 import GardeningPreferences from "./pages/GardeningPreferences";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Cart from "./pages/Cart";
 import { toast } from "sonner";
 
 const queryClient = new QueryClient();
@@ -79,6 +81,12 @@ const AppContent = () => {
               <GardeningPreferences />
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

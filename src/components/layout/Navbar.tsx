@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, Leaf, ShoppingCart, BookOpen, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from "@/components/ui/badge";
+import { useCart } from '@/hooks/useCart';
 
 interface NavbarProps {
   isAuthenticated: boolean;
@@ -11,6 +13,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartItemCount } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -53,6 +56,22 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
           
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
+              <Link to="/cart" className="relative">
+                <Button 
+                  variant="ghost" 
+                  className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1"
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                  <span>Cart</span>
+                </Button>
+                {cartItemCount > 0 && (
+                  <Badge 
+                    className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px] min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full"
+                  >
+                    {cartItemCount}
+                  </Badge>
+                )}
+              </Link>
               <Button 
                 variant="ghost" 
                 className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1"
@@ -75,6 +94,21 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
               </Link>
               <Link to="/signup">
                 <Button className="bg-ur-green text-white hover:bg-ur-green/90">Sign Up</Button>
+              </Link>
+              <Link to="/cart" className="relative">
+                <Button 
+                  variant="ghost" 
+                  className="text-gray-700 hover:text-ur-green p-2"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                </Button>
+                {cartItemCount > 0 && (
+                  <Badge 
+                    className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px] min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full"
+                  >
+                    {cartItemCount}
+                  </Badge>
+                )}
               </Link>
             </div>
           )}
@@ -130,6 +164,22 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
             >
               <BookOpen className="h-4 w-4" />
               <span>Learn</span>
+            </Link>
+            
+            <Link 
+              to="/cart" 
+              className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <ShoppingCart className="h-4 w-4" />
+              <span>Cart</span>
+              {cartItemCount > 0 && (
+                <Badge 
+                  className="ml-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px]"
+                >
+                  {cartItemCount}
+                </Badge>
+              )}
             </Link>
             
             {isAuthenticated ? (
