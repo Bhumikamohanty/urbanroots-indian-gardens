@@ -1,51 +1,45 @@
-# Welcome to your Lovable project
+# 🌿 Urban Roots – Indian Gardens
 
-## Project info
+**Urban Roots** is a modern web platform built to help users care for their plants and shop for gardening essentials. It blends plant care tracking, educational content, and e-commerce features—creating an all-in-one experience for gardening lovers.
 
-**URL**: https://lovable.dev/projects/8278cf7b-d25a-440e-ba16-c7740f952db7
+🔗 **Live Site**: [https://urbanroots-indian-gardens.vercel.app/](https://urbanroots-indian-gardens.vercel.app/)
 
-## How can I edit this code?
+---
+## ✨ Features
 
-There are several ways of editing your application.
+- **Plant Care Tracker**
+  - Add and manage personal plant collections
+  - Set reminders for watering, fertilizing, and pruning
+  - Filter by plant types (Herbs, Indoor, Vegetables, etc.)
 
-**Use Lovable**
+- **Online Shop**
+  - Browse products with images, pricing, and ratings
+  - Add to cart with quantity management
+  - Filter by category
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8278cf7b-d25a-440e-ba16-c7740f952db7) and start prompting.
+- **Learning Resources**
+  - Educational videos and content
+  - Categorized tutorials for easy navigation
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Responsive Layout**
+  - Mobile-friendly design with navigation menu
+  - Interactive UI and toast notifications
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠 Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend**: React (TypeScript), Vite
+- **Styling**: Tailwind CSS (custom colors)
+- **Routing**: React Router DOM
+- **State**: React Context API, local state
+- **Data**: TanStack React Query, localStorage
+- **UI Components**: shadcn/ui, Lucide Icons, Sonner Toast
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🚀 Getting Started
 
-# Step 2: Navigate to the project directory.
+```bash
+git clone <YOUR_REPO_URL>
 cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
