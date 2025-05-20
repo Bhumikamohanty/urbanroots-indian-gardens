@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, Leaf, ShoppingCart, BookOpen, LogOut, User } from 'lucide-react';
@@ -36,44 +35,44 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
             <Home className="h-4 w-4" />
             <span>Home</span>
           </Link>
-          
+
           {isAuthenticated && (
             <Link to="/my-plants" className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1">
               <Leaf className="h-4 w-4" />
               <span>My Plants</span>
             </Link>
           )}
-          
+
           <Link to="/shop" className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1">
             <ShoppingCart className="h-4 w-4" />
             <span>Shop</span>
           </Link>
-          
+
           <Link to="/learn" className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1">
             <BookOpen className="h-4 w-4" />
             <span>Learn</span>
           </Link>
-          
+
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               <Link to="/cart" className="relative">
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1"
                 >
                   <ShoppingCart className="h-4 w-4" />
                   <span>Cart</span>
                 </Button>
                 {cartItemCount > 0 && (
-                  <Badge 
+                  <Badge
                     className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px] min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full"
                   >
                     {cartItemCount}
                   </Badge>
                 )}
               </Link>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-1"
                 onClick={onLogout}
               >
@@ -96,14 +95,14 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                 <Button className="bg-ur-green text-white hover:bg-ur-green/90">Sign Up</Button>
               </Link>
               <Link to="/cart" className="relative">
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className="text-gray-700 hover:text-ur-green p-2"
                 >
                   <ShoppingCart className="h-5 w-5" />
                 </Button>
                 {cartItemCount > 0 && (
-                  <Badge 
+                  <Badge
                     className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px] min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full"
                   >
                     {cartItemCount}
@@ -113,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
             </div>
           )}
         </div>
-        
+
         {/* Mobile Menu Button */}
         <button className="md:hidden" onClick={toggleMenu}>
           {isMenuOpen ? (
@@ -123,23 +122,23 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
           )}
         </button>
       </div>
-      
+
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden py-4 px-6 bg-white border-t border-gray-100 animate-fade-in">
           <div className="flex flex-col gap-4">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               <Home className="h-4 w-4" />
               <span>Home</span>
             </Link>
-            
+
             {isAuthenticated && (
-              <Link 
-                to="/my-plants" 
+              <Link
+                to="/my-plants"
                 className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -147,52 +146,52 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                 <span>My Plants</span>
               </Link>
             )}
-            
-            <Link 
-              to="/shop" 
+
+            <Link
+              to="/shop"
               className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               <ShoppingCart className="h-4 w-4" />
               <span>Shop</span>
             </Link>
-            
-            <Link 
-              to="/learn" 
+
+            <Link
+              to="/learn"
               className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               <BookOpen className="h-4 w-4" />
               <span>Learn</span>
             </Link>
-            
-            <Link 
-              to="/cart" 
+
+            <Link
+              to="/cart"
               className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               <ShoppingCart className="h-4 w-4" />
               <span>Cart</span>
               {cartItemCount > 0 && (
-                <Badge 
+                <Badge
                   className="ml-1 px-1.5 py-0.5 bg-ur-green text-white text-[10px]"
                 >
                   {cartItemCount}
                 </Badge>
               )}
             </Link>
-            
+
             {isAuthenticated ? (
               <>
-                <Link 
-                  to="/profile" 
+                <Link
+                  to="/profile"
                   className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <User className="h-4 w-4" />
                   <span>Profile</span>
                 </Link>
-                <button 
+                <button
                   className="text-gray-700 hover:text-ur-green font-medium flex items-center gap-2 py-2"
                   onClick={() => {
                     onLogout();
@@ -205,15 +204,15 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
               </>
             ) : (
               <div className="flex flex-col gap-3 mt-2">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="bg-white border border-ur-green text-ur-green py-2 px-4 rounded-md text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login
                 </Link>
-                <Link 
-                  to="/signup" 
+                <Link
+                  to="/signup"
                   className="bg-ur-green text-white py-2 px-4 rounded-md text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
