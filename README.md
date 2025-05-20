@@ -5,6 +5,7 @@
 🔗 **Live Site**: [https://urbanroots-indian-gardens.vercel.app/](https://urbanroots-indian-gardens.vercel.app/)
 
 ---
+
 ## ✨ Features
 
 - **Plant Care Tracker**
@@ -41,5 +42,19 @@
 ## 🚀 Getting Started
 
 ```bash
-git clone <YOUR_REPO_URL>
-cd <YOUR_PROJECT_NAME>
+git clone https://github.com/Bhumikamohanty/urbanroots-indian-gardens.git
+cd urbanroots-indian-gardens
+npm install
+npm run dev
+````
+
+---
+
+## 👥 Authors
+
+* [SUPREME-AKASH-DEVELOPER](https://github.com/SUPREME-AKASH-DEVELOPER)
+* [Bhumika Mohanty](https://github.com/Bhumikamohanty)
+
+---
+
+> *Grow smarter, garden better – with Urban Roots.* 🌱
